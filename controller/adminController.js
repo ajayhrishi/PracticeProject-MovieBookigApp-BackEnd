@@ -1,26 +1,28 @@
- 
-import User from "../model/User.js";
+import Admin from "../model/Admin.js";
 import  bcrypt  from "bcryptjs";
-export const getAllUsers = async(req,res,next)=>{
+import jwt from "jsonwebtoken"; // using jwt will help to give a special code from the backend to perform a spesific task and will only be valid for a while
+
+
+export const getAllAdmin = async(req,res,next)=>{
     
-    let users;
+    let admins ;
     try{
-        users = await User.find();
+        admins  = await Admin.find();
 
     }catch(err){
         return next(err);
     }
 
-    if(!users){
+    if(!admins){
         return res.status(500).json({message:"Unexpected Error Occured"});
     }
 
-    return res.status(200).json({users});
+    return res.status(200).json({admins});
 
 }
 
 
-export const addUser = async(req,res,next)=>{
+export const addAdmin = async(req,res,next)=>{
    
     const {name, email, password } = req.body;
     if(
@@ -29,23 +31,23 @@ export const addUser = async(req,res,next)=>{
         return res.status(422).json({message:"Invalid data"});
     }
 
-    let user;
+    let admin;
     const cryptedPassword = bcrypt.hashSync(password); 
     try{
-        user = new User({name,email, password:cryptedPassword});
-        user = await user.save();
+        admin = new Admin({name,email, password:cryptedPassword});
+        admin = await admin.save();
     }catch(err){
         return next(err);
     }
 
-    if(!user){
+    if(!admin){
         return res.status(500).json({message:'Internal Error'});
     }
 
     return res.status(201).json({user});
 }
 
-export const updateUser = async(req,res,next)=>{
+export const updateAdmin = async(req,res,next)=>{
     const id = req.params.id;
     const {name, email, password } = req.body;
     if(
@@ -54,31 +56,31 @@ export const updateUser = async(req,res,next)=>{
         return res.status(422).json({message:"Invalid data"});
     }
 
-    let user;
+    let admin;
     const cryptedPassword = bcrypt.hashSync(password); 
     try{
-        user = await User.findByIdAndUpdate(id,{
+        admin = await Admin.findByIdAndUpdate(id,{
             name, email, password: cryptedPassword
         });
     }catch(err){
         return next(err); 
     }
-    if(!user){
+    if(!admin){
         return res.status(500).json({message:"Internal Error"});
     }
 
-    return res.status(201).json({user});
+    return res.status(201).json({admin});
 }
 
-export const deleteUser = async(req,res,next) =>{
-    let user;
+export const deleteAdmin = async(req,res,next) =>{
+    let admin;
     try{
-    user = await User.findByIdAndDelete(req.params.id)
+        admin = await Admin.findByIdAndDelete(req.params.id)
 }catch(err){
     console.log(err);
     return res.status(404).json({message:'unable to delete'});
 }
-if(!user){
+if(!admin){
     return res.status(500).json({message:"Internal Server Error"});
 }
 
@@ -86,7 +88,7 @@ return res.status(201).json({message:'deleted'})
 }
 
 
-export const loginUser = async(req,res,next) =>{
+export const loginAdmin = async(req,res,next) =>{
     
     let {email, password } = req.body; 
 
@@ -95,9 +97,9 @@ export const loginUser = async(req,res,next) =>{
     ){
         return res.status(422).json({message:"Invalid data"});
     }
-    let existingUser;
+    let  existingAdmin;
     try{
-        existingUser = await User.findOne({email});
+        existingAdmin = await Admin.findOne({email});
     }catch(err){
         return console.log(err);
     }
@@ -106,11 +108,13 @@ export const loginUser = async(req,res,next) =>{
         return res.status(404).json({message:'unable to find user with this email'});
     }
 
-    const isPasswordCorrect = bcrypt.compareSync(password,existingUser.password);
+    const isPasswordCorrect = bcrypt.compareSync(password, existingAdmin.password);
 
     if(!isPasswordCorrect){
         return res.status(400).json({message:'Incorrect Password'}); 
     }
 
-    return res.status(201).json({message:'loggedIn', id: existingUser.id});
+    const token = jwt.sign({id: existingAdmin._id}, process.env.adminKey, {expiresIn:"7d",});
+
+    return res.status(201).json({message:'loggedIn', id:  existingAdmin.id, token});
 }

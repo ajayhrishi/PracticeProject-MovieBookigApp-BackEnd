@@ -118,3 +118,5 @@ export const loginAdmin = async(req,res,next) =>{
 
     return res.status(201).json({message:'loggedIn', id:  existingAdmin.id, token});
 }
+
+// testing

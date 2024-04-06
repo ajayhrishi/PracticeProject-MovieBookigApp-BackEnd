@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cors from 'cors'
 import userRouter from './routes/userRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
+import movieRouter from './routes/movieRoutes.js';
+
 dotenv.config();
 
 
@@ -12,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
+app.use('/movie', movieRouter);
 mongoose.connect(`mongodb+srv://ajayhrishi:${process.env.db}@moviebooking.kjzzkly.mongodb.net/`).then(()=>console.log('DataBaseConnected'))
 .then(()=>{app.listen(5000)}).then(()=>{console.log("intiated the work on backend Movie booking app");}).catch((err)=>{console.log(err)});
 

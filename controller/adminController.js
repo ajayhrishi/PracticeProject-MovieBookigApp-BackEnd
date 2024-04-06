@@ -44,7 +44,7 @@ export const addAdmin = async(req,res,next)=>{
         return res.status(500).json({message:'Internal Error'});
     }
 
-    return res.status(201).json({user});
+    return res.status(201).json({admin});
 }
 
 export const updateAdmin = async(req,res,next)=>{
@@ -104,7 +104,7 @@ export const loginAdmin = async(req,res,next) =>{
         return console.log(err);
     }
 
-    if(!existingUser){
+    if(!existingAdmin){
         return res.status(404).json({message:'unable to find user with this email'});
     }
 

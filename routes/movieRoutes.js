@@ -4,10 +4,13 @@ import {getAllMovies, addMovie, updateMovie, deleteMovie, bookMovie, cancelMovie
 const adminRouter = express.Router();
 
 adminRouter.get('/', getAllMovies);
-adminRouter.post('/signUp', addMovie);
+adminRouter.post('/addMovie', addMovie);
 adminRouter.put('/:id', updateMovie);
 adminRouter.delete('/:id', deleteMovie);
-adminRouter.post('/login', bookMovie);
+adminRouter.post('/bookMovie', bookMovie);
 adminRouter.delete('/cancel/:id', cancelMovie);
 
 export default adminRouter;
+
+
+// /movie/addMovie

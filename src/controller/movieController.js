@@ -1,4 +1,5 @@
 import Movie from "../model/Movie.js";
+import Admin from "../model/Admin.js";
 import mongoose from "mongoose";
 
 import jwt from "jsonwebtoken"; 
@@ -81,6 +82,9 @@ export const addMovie = async(req,res,next)=>{
     }
     return res.status(201).json({movie});
 }
+
+
+// *************************************************************************************************
 
 export const updateMovie = async(req,res,next)=>{
 

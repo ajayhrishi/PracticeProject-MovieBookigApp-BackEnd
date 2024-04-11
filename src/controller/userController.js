@@ -1,28 +1,26 @@
-import Admin from "../model/Admin.js";
+ 
+import User from '../model/User.js'
 import  bcrypt  from "bcryptjs";
-import jwt from "jsonwebtoken"; // using jwt will help to give a special code from the backend to perform a spesific task and will only be valid for a while
-
-
-export const getAllAdmin = async(req,res,next)=>{
+export const getAllUsers = async(req,res,next)=>{
     
-    let admins ;
+    let users;
     try{
-        admins  = await Admin.find();
+        users = await User.find();
 
     }catch(err){
         return next(err);
     }
 
-    if(!admins){
+    if(!users){
         return res.status(500).json({message:"Unexpected Error Occured"});
     }
 
-    return res.status(200).json({admins});
+    return res.status(200).json({users});
 
 }
 
 
-export const addAdmin = async(req,res,next)=>{
+export const addUser = async(req,res,next)=>{
    
     const {name, email, password } = req.body;
     if(
@@ -31,23 +29,23 @@ export const addAdmin = async(req,res,next)=>{
         return res.status(422).json({message:"Invalid data"});
     }
 
-    let admin;
+    let user;
     const cryptedPassword = bcrypt.hashSync(password); 
     try{
-        admin = new Admin({name,email, password:cryptedPassword});
-        admin = await admin.save();
+        user = new User({name,email, password:cryptedPassword});
+        user = await user.save();
     }catch(err){
         return next(err);
     }
 
-    if(!admin){
+    if(!user){
         return res.status(500).json({message:'Internal Error'});
     }
 
-    return res.status(201).json({admin});
+    return res.status(201).json({user});
 }
 
-export const updateAdmin = async(req,res,next)=>{
+export const updateUser = async(req,res,next)=>{
     const id = req.params.id;
     const {name, email, password } = req.body;
     if(
@@ -56,31 +54,31 @@ export const updateAdmin = async(req,res,next)=>{
         return res.status(422).json({message:"Invalid data"});
     }
 
-    let admin;
+    let user;
     const cryptedPassword = bcrypt.hashSync(password); 
     try{
-        admin = await Admin.findByIdAndUpdate(id,{
+        user = await User.findByIdAndUpdate(id,{
             name, email, password: cryptedPassword
         });
     }catch(err){
         return next(err); 
     }
-    if(!admin){
+    if(!user){
         return res.status(500).json({message:"Internal Error"});
     }
 
-    return res.status(201).json({admin});
+    return res.status(201).json({user});
 }
 
-export const deleteAdmin = async(req,res,next) =>{
-    let admin;
+export const deleteUser = async(req,res,next) =>{
+    let user;
     try{
-        admin = await Admin.findByIdAndDelete(req.params.id)
+    user = await User.findByIdAndDelete(req.params.id)
 }catch(err){
     console.log(err);
     return res.status(404).json({message:'unable to delete'});
 }
-if(!admin){
+if(!user){
     return res.status(500).json({message:"Internal Server Error"});
 }
 
@@ -88,7 +86,7 @@ return res.status(201).json({message:'deleted'})
 }
 
 
-export const loginAdmin = async(req,res,next) =>{
+export const loginUser = async(req,res,next) =>{
     
     let {email, password } = req.body; 
 
@@ -97,26 +95,22 @@ export const loginAdmin = async(req,res,next) =>{
     ){
         return res.status(422).json({message:"Invalid data"});
     }
-    let  existingAdmin;
+    let existingUser;
     try{
-        existingAdmin = await Admin.findOne({email});
+        existingUser = await User.findOne({email});
     }catch(err){
         return console.log(err);
     }
 
-    if(!existingAdmin){
+    if(!existingUser){
         return res.status(404).json({message:'unable to find user with this email'});
     }
 
-    const isPasswordCorrect = bcrypt.compareSync(password, existingAdmin.password);
+    const isPasswordCorrect = bcrypt.compareSync(password,existingUser.password);
 
     if(!isPasswordCorrect){
         return res.status(400).json({message:'Incorrect Password'}); 
     }
 
-    const token = jwt.sign({id: existingAdmin._id}, process.env.adminKey, {expiresIn:"7d",});
-
-    return res.status(201).json({message:'loggedIn', id:  existingAdmin.id, token});
+    return res.status(201).json({message:'loggedIn', id: existingUser.id});
 }
-
-// testing

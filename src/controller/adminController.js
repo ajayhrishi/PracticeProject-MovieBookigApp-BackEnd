@@ -2,7 +2,7 @@ import Admin from '../model/Admin.js'
 import  bcrypt  from "bcryptjs";
 import jwt from "jsonwebtoken"; // using jwt will help to give a special code from the backend to perform a spesific task and will only be valid for a while
 
-
+// ****************************************************
 export const getAllAdmin = async(req,res,next)=>{
     
     let admins ;
@@ -21,7 +21,7 @@ export const getAllAdmin = async(req,res,next)=>{
 
 }
 
-
+// ****************************************************
 export const addAdmin = async(req,res,next)=>{
    
     const {name, email, password } = req.body;
@@ -46,7 +46,7 @@ export const addAdmin = async(req,res,next)=>{
 
     return res.status(201).json({admin});
 }
-
+// ****************************************************
 export const updateAdmin = async(req,res,next)=>{
     const id = req.params.id;
     const {name, email, password } = req.body;
@@ -72,6 +72,8 @@ export const updateAdmin = async(req,res,next)=>{
     return res.status(201).json({admin});
 }
 
+// ****************************************************
+
 export const deleteAdmin = async(req,res,next) =>{
     let admin;
     try{
@@ -87,6 +89,7 @@ if(!admin){
 return res.status(201).json({message:'deleted'})
 }
 
+// ****************************************************
 
 export const loginAdmin = async(req,res,next) =>{
     
@@ -119,4 +122,4 @@ export const loginAdmin = async(req,res,next) =>{
     return res.status(201).json({message:'loggedIn', id:  existingAdmin.id, token});
 }
 
-// testing
+// ****************************************************

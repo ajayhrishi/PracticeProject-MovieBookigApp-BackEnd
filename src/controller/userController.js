@@ -1,6 +1,9 @@
  
 import User from '../model/User.js'
 import  bcrypt  from "bcryptjs";
+
+// ****************************************************
+
 export const getAllUsers = async(req,res,next)=>{
     
     let users;
@@ -19,6 +22,7 @@ export const getAllUsers = async(req,res,next)=>{
 
 }
 
+// ****************************************************
 
 export const addUser = async(req,res,next)=>{
    
@@ -45,6 +49,8 @@ export const addUser = async(req,res,next)=>{
     return res.status(201).json({user});
 }
 
+// ****************************************************
+
 export const updateUser = async(req,res,next)=>{
     const id = req.params.id;
     const {name, email, password } = req.body;
@@ -70,6 +76,8 @@ export const updateUser = async(req,res,next)=>{
     return res.status(201).json({user});
 }
 
+// ****************************************************
+
 export const deleteUser = async(req,res,next) =>{
     let user;
     try{
@@ -85,6 +93,7 @@ if(!user){
 return res.status(201).json({message:'deleted'})
 }
 
+// ****************************************************
 
 export const loginUser = async(req,res,next) =>{
     
@@ -114,3 +123,5 @@ export const loginUser = async(req,res,next) =>{
 
     return res.status(201).json({message:'loggedIn', id: existingUser.id});
 }
+
+// ****************************************************

@@ -75,14 +75,29 @@ export const addMovie = async(req,res,next)=>{
     }
     let movie; 
     try{
-        movie = new Movie({title, description, releaseDate: new Date(`${releaseDate}`), posterURL,actors, admin: adminId, actors})
-        movie =  await movie.save();
+        movie = new Movie({title, description, releaseDate: new Date(`${releaseDate}`), posterURL,actors, admin: adminId, actors}) // prepared movie model to save to mongodb
+        const adminUser =  await Admin.findById(adminId); 
+        adminUser.movies.push(movie);  // prepared updated the adminUserModel with the new movie added, inorder to save to mongodb 
+
+        const session = await mongoose.startSession();  // transation started and session variable will be stored with the properties of the moongies session
+
+
+        session.startTransaction(); // starting the moongoose transation using the sessions variable 
+
+        await movie.save({session}); // gave command to save movie in movie model under the session
+        await adminUser.save({session}); // gave command to save movie in adminModel witht he new copy
+
+        await session.commitTransaction(); // finalizing the save in mongodb with it's relations to each others. 
+
+
         }catch(err){
         return res.status(500).json({message:"internal Error"});
     }
     return res.status(201).json({movie});
 }
 
+//mongoDb Transactions allow you to perform multiple operations on one or more collections and ensure that either all operations succeed or none of them do. 
+//This is particularly useful when you need to update multiple documents across different collections in an atomic manner.
 
 // *************************************************************************************************
 

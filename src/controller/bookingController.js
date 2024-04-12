@@ -104,7 +104,7 @@ export const deleteBooking = async (req, res, next) => {
 
         session.commitTransaction();
         console.log('completed the transaction without breaking');
-    }catch(err){ //6619633aca8d16b301ff6c48
+    }catch(err){ 
         console.log('this is an error from try catch', err);
     }
 

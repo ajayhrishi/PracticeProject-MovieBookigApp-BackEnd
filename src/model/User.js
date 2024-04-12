@@ -13,9 +13,9 @@ const userSchema = new Schema({
         required:true,
         minlength:6,
     },
-    bookings:[{
+    bookings:[{  
         type: mongoose.Types.ObjectId,
-        rel: "Booking"
+        ref: "Booking",
     }]
 });
 

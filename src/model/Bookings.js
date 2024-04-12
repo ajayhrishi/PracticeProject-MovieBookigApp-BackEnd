@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
 movie:{
-    type:String,
+    type:mongoose.Types.ObjectId,
+    rel:"Movie",
     required: true,
 },
 date:{
@@ -16,7 +17,7 @@ seatNumber:{
 },
 user:[
     {   type: mongoose.Types.ObjectId,
-        rel : "User", 
+        ref : "User", 
         required : true, 
     }
 ]

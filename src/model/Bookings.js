@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const bookingSchema = new mongoose.Schema({
 movie:{
     type:mongoose.Types.ObjectId,
-    rel:"Movie",
+    ref:"Movie",
     required: true,
 },
 date:{
@@ -15,12 +15,12 @@ seatNumber:{
     required: true,
 
 },
-user:[
+user:
     {   type: mongoose.Types.ObjectId,
         ref : "User", 
         required : true, 
     }
-]
+
 
 });
 

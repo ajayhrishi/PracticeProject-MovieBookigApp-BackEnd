@@ -1,6 +1,7 @@
  
 import User from '../model/User.js'
 import  bcrypt  from "bcryptjs";
+import Bookings from '../model/Bookings.js';
 
 // ****************************************************
 
@@ -125,3 +126,17 @@ export const loginUser = async(req,res,next) =>{
 }
 
 // ****************************************************
+
+export const getAllUserBookings = async(req,res,next)=>{
+    const id = req.params.id;
+    let bookings;
+    try{
+        bookings = await Bookings.find({user:id});
+    }catch(err){
+        return res.status(500).json({message:"Internal Error", err});
+    }
+    if(!bookings){
+        return res.status(200).json({message: "The user does not have any bookings so far"});
+    }
+    return res.status(200).json({bookings});
+}

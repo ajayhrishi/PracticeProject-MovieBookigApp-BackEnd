@@ -22,7 +22,7 @@ app.use('/booking', bookingRouter);
 mongoose.connect(`mongodb+srv://ajayhrishi:${process.env.db}@moviebooking.kjzzkly.mongodb.net/`).then(()=>console.log('DataBaseConnected'))
 .then(()=>{app.listen(5000)}).then(()=>{console.log("intiated the work on backend Movie booking app");}).catch((err)=>{console.log(err)});
 
-
+// render on https://practiceproject-moviebookigapp-backend.onrender.com
 
 
 

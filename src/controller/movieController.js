@@ -9,7 +9,7 @@ import { decrypt } from "dotenv";
 
 // *************************************************************************************************
 export const getAllMovies = async(req,res,next)=>{
-    console.log('this is the getallMovie function');
+    // console.log('this is the getallMovie function');
     let movies;
     try{
         movies = await Movie.find();

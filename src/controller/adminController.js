@@ -92,7 +92,7 @@ return res.status(201).json({message:'deleted'})
 // ****************************************************
 
 export const loginAdmin = async(req,res,next) =>{
-    
+        console.log('this is the Login Admin Function');
     let {email, password } = req.body; 
 
     if(
@@ -104,11 +104,11 @@ export const loginAdmin = async(req,res,next) =>{
     try{
         existingAdmin = await Admin.findOne({email});
     }catch(err){
-        return console.log(err);
+        console.log(err);
     }
 
     if(!existingAdmin){
-        return res.status(404).json({message:'unable to find user with this email'});
+        return res.status(404).json({message:'unable to find an Admin with this email'});
     }
 
     const isPasswordCorrect = bcrypt.compareSync(password, existingAdmin.password);

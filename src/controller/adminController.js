@@ -72,6 +72,22 @@ export const updateAdmin = async(req,res,next)=>{
     return res.status(201).json({admin});
 }
 
+export const getAdmin = async(req, res, next) => {
+    const id = req.params.id;
+    let admin;
+    try{
+        admin = await Admin.findById(id);
+    }catch(err){
+        return next(err); 
+    }
+    console.log('this is the get AdminById function');
+
+    if(!admin){
+        return res.status(500).json({message:"Internal Error"});
+    }
+    return res.status(200).json({admin})
+}
+
 // ****************************************************
 
 export const deleteAdmin = async(req,res,next) =>{
